@@ -58,7 +58,10 @@ public class AnnotationConfigApplicationContext extends GenericApplicationContex
 	 * through {@link #register} calls and then manually {@linkplain #refresh refreshed}.
 	 */
 	public AnnotationConfigApplicationContext() {
+		//线执行父类构造方法  AnnotationConfigApplicationContext implements BeanDefinitionRegistry
 		this.reader = new AnnotatedBeanDefinitionReader(this);
+		//会注册六个开天辟地的6个rootBeanDefinition
+		//放到 List<String> beanDefinitionNames   Map<String, BeanDefinition> beanDefinitionMap
 		this.scanner = new ClassPathBeanDefinitionScanner(this);
 	}
 
@@ -79,6 +82,7 @@ public class AnnotationConfigApplicationContext extends GenericApplicationContex
 	 * e.g. {@link Configuration @Configuration} classes
 	 */
 	public AnnotationConfigApplicationContext(Class<?>... annotatedClasses) {
+	    //构造方法执行前会调用父类的构造方法 初始化所谓的bean工厂  即 DefaultListableBeanFactory  也实现了BeanDefinitionRegistry
 		this();
 		register(annotatedClasses);
 		refresh();

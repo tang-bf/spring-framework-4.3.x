@@ -80,6 +80,8 @@ public class InjectionMetadata {
 		Collection<InjectedElement> elementsToIterate =
 				(this.checkedElements != null ? this.checkedElements : this.injectedElements);
 		if (!elementsToIterate.isEmpty()) {
+			//  g根据是CommonAnnotationBeanPostProcesson LookupElement 内部类
+			//  还是 AutoWiredAnnotationBeanPostProcessor 的内部类 AutowiredFieldElement AutowiredMethodElement
 			for (InjectedElement element : elementsToIterate) {
 				if (logger.isDebugEnabled()) {
 					logger.debug("Processing injected element of bean '" + beanName + "': " + element);
@@ -160,7 +162,7 @@ public class InjectionMetadata {
 				}
 			}
 		}
-
+		//  注入是通过Java的 Reflection Field set方法或Method invoke方法完成的。
 		/**
 		 * Either this or {@link #getResourceToInject} needs to be overridden.
 		 */

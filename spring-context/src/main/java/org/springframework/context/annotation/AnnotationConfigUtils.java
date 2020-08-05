@@ -39,6 +39,10 @@ import org.springframework.core.type.AnnotatedTypeMetadata;
 import org.springframework.core.type.AnnotationMetadata;
 import org.springframework.util.ClassUtils;
 
+import javax.annotation.Resources;
+import javax.ejb.EJB;
+import javax.xml.ws.WebServiceRef;
+
 /**
  * Utility class that allows for convenient registration of common
  * {@link org.springframework.beans.factory.config.BeanPostProcessor} and
@@ -143,7 +147,7 @@ public class AnnotationConfigUtils {
 	 */
 	public static Set<BeanDefinitionHolder> registerAnnotationConfigProcessors(
 			BeanDefinitionRegistry registry, Object source) {
-
+		//获取bean工厂
 		DefaultListableBeanFactory beanFactory = unwrapDefaultListableBeanFactory(registry);
 		if (beanFactory != null) {
 			if (!(beanFactory.getDependencyComparator() instanceof AnnotationAwareOrderComparator)) {
@@ -153,18 +157,23 @@ public class AnnotationConfigUtils {
 				beanFactory.setAutowireCandidateResolver(new ContextAnnotationAutowireCandidateResolver());
 			}
 		}
-
+		//上面线暂时忽略
 		Set<BeanDefinitionHolder> beanDefs = new LinkedHashSet<BeanDefinitionHolder>(8);
-
+		//DefaultListableBeanFactory@4566e5bd: this.beanDefinitionMap.containsKey(beanName)
 		if (!registry.containsBeanDefinition(CONFIGURATION_ANNOTATION_PROCESSOR_BEAN_NAME)) {
 			RootBeanDefinition def = new RootBeanDefinition(ConfigurationClassPostProcessor.class);
 			def.setSource(source);
+			//registerPostProcessor 会最终this.beanDefinitionMap.put(beanName, beanDefinition)
+			//中间还会封装一层 BeanDefinitionHolder
 			beanDefs.add(registerPostProcessor(registry, def, CONFIGURATION_ANNOTATION_PROCESSOR_BEAN_NAME));
-		}
-
+		}//刚开始bdMap都是空的，ConfigurationClassPostProcessor 是6个rootbean中的唯一一个beanfacotryprocessor
+		//（首先是实现BeanDefinitionRegistryPostProcessor extends beanfacotryprocessor ;
+		// 二者在后期处理的机制不同）;用来处理configuration 注解  componentscan  等注解
+		// 并且对有configuration注解的类进行cglib增强代理
+		// postProcessBeanFactory  enhanceConfigurationClasses 进行cglib增强
 		if (!registry.containsBeanDefinition(AUTOWIRED_ANNOTATION_PROCESSOR_BEAN_NAME)) {
 			RootBeanDefinition def = new RootBeanDefinition(AutowiredAnnotationBeanPostProcessor.class);
-			def.setSource(source);
+			def.setSource(source); // 处理spring自带的注解 Autowired value 及支持 java 提供的注解 @Inject (参考构造方法)
 			beanDefs.add(registerPostProcessor(registry, def, AUTOWIRED_ANNOTATION_PROCESSOR_BEAN_NAME));
 		}
 
@@ -177,10 +186,10 @@ public class AnnotationConfigUtils {
 		// Check for JSR-250 support, and if present add the CommonAnnotationBeanPostProcessor.
 		if (jsr250Present && !registry.containsBeanDefinition(COMMON_ANNOTATION_PROCESSOR_BEAN_NAME)) {
 			RootBeanDefinition def = new RootBeanDefinition(CommonAnnotationBeanPostProcessor.class);
-			def.setSource(source);
+			def.setSource(source);//处理 @Resources、@WebServiceRef、@EJB 都是java 提供的
 			beanDefs.add(registerPostProcessor(registry, def, COMMON_ANNOTATION_PROCESSOR_BEAN_NAME));
 		}
-
+		//持久化
 		// Check for JPA support, and if present add the PersistenceAnnotationBeanPostProcessor.
 		if (jpaPresent && !registry.containsBeanDefinition(PERSISTENCE_ANNOTATION_PROCESSOR_BEAN_NAME)) {
 			RootBeanDefinition def = new RootBeanDefinition();
@@ -195,7 +204,7 @@ public class AnnotationConfigUtils {
 			def.setSource(source);
 			beanDefs.add(registerPostProcessor(registry, def, PERSISTENCE_ANNOTATION_PROCESSOR_BEAN_NAME));
 		}
-
+		//EventListenerMethodProcessor
 		if (!registry.containsBeanDefinition(EVENT_LISTENER_PROCESSOR_BEAN_NAME)) {
 			RootBeanDefinition def = new RootBeanDefinition(EventListenerMethodProcessor.class);
 			def.setSource(source);
@@ -215,7 +224,7 @@ public class AnnotationConfigUtils {
 			BeanDefinitionRegistry registry, RootBeanDefinition definition, String beanName) {
 
 		definition.setRole(BeanDefinition.ROLE_INFRASTRUCTURE);
-		registry.registerBeanDefinition(beanName, definition);
+		registry.registerBeanDefinition(beanName, definition);//this.beanDefinitionMap.put(beanName, beanDefinition);
 		return new BeanDefinitionHolder(definition, beanName);
 	}
 
@@ -263,7 +272,7 @@ public class AnnotationConfigUtils {
 
 	static BeanDefinitionHolder applyScopedProxyMode(
 			ScopeMetadata metadata, BeanDefinitionHolder definition, BeanDefinitionRegistry registry) {
-
+		//作用域代理——proxyMode属性 @Scope注解的proxyMode属性相同的xml元素。它会告诉Spring为bean创建一个作用域代理。默认情况下，它会使用CGLib创建目标类的代理，如果要生成基于接口的代理可以将proxy-target-class属性设置成false
 		ScopedProxyMode scopedProxyMode = metadata.getScopedProxyMode();
 		if (scopedProxyMode.equals(ScopedProxyMode.NO)) {
 			return definition;

@@ -228,18 +228,18 @@ public class AutowiredAnnotationBeanPostProcessor extends InstantiationAwareBean
 	}
 
 
-	@Override
+	@Override//解析标记了 @AutoWired、@Value、@Inject注解的属性和方法
 	public void postProcessMergedBeanDefinition(RootBeanDefinition beanDefinition, Class<?> beanType, String beanName) {
-		if (beanType != null) {
+		if (beanType != null) {//把@AutoWired、@Value、@Inject注解的方法或字段信息封装为Metadata然后放在了injectionMetadataCache
 			InjectionMetadata metadata = findAutowiringMetadata(beanName, beanType, null);
-			metadata.checkConfigMembers(beanDefinition);
+			metadata.checkConfigMembers(beanDefinition);//暂时没看懂意义
 		}
 	}
 
 	@Override
 	public Constructor<?>[] determineCandidateConstructors(Class<?> beanClass, final String beanName)
 			throws BeanCreationException {
-
+		//推断构造方法 z这个逻辑有点复杂  public 参数多的排在最前面  两次推断构造方法
 		// Let's check for lookup methods here...
 		if (!this.lookupMethodsChecked.contains(beanName)) {
 			try {
@@ -356,13 +356,13 @@ public class AutowiredAnnotationBeanPostProcessor extends InstantiationAwareBean
 		}
 		return (candidateConstructors.length > 0 ? candidateConstructors : null);
 	}
-
+	//在此调用执行完成@AutoWired属性的注入
 	@Override
 	public PropertyValues postProcessPropertyValues(
 			PropertyValues pvs, PropertyDescriptor[] pds, Object bean, String beanName) throws BeanCreationException {
-
+		//为什么再次执行获取@AutoWired、@Value、@Inject属性的信息
 		InjectionMetadata metadata = findAutowiringMetadata(beanName, bean.getClass(), pvs);
-		try {
+		try { //后续判断是通过  Java的 Reflection Field set方法还是Method invoke方法完成
 			metadata.inject(bean, beanName, pvs);
 		}
 		catch (BeanCreationException ex) {
@@ -408,7 +408,7 @@ public class AutowiredAnnotationBeanPostProcessor extends InstantiationAwareBean
 					if (metadata != null) {
 						metadata.clear(pvs);
 					}
-					try {
+					try {// 真正解析执行构造出带有目标类中标识了@AutoWired、@Value、@Inejct注解  doWithLocalFields  doWithLocalMethods
 						metadata = buildAutowiringMetadata(clazz);
 						this.injectionMetadataCache.put(cacheKey, metadata);
 					}
@@ -429,7 +429,7 @@ public class AutowiredAnnotationBeanPostProcessor extends InstantiationAwareBean
 		do {
 			final LinkedList<InjectionMetadata.InjectedElement> currElements =
 					new LinkedList<InjectionMetadata.InjectedElement>();
-
+			//判断字段上是否存在autowiredAnnotationTypes
 			ReflectionUtils.doWithLocalFields(targetClass, new ReflectionUtils.FieldCallback() {
 				@Override
 				public void doWith(Field field) throws IllegalArgumentException, IllegalAccessException {
@@ -446,7 +446,7 @@ public class AutowiredAnnotationBeanPostProcessor extends InstantiationAwareBean
 					}
 				}
 			});
-
+			//判方法上是否存在autowiredAnnotationTypes
 			ReflectionUtils.doWithLocalMethods(targetClass, new ReflectionUtils.MethodCallback() {
 				@Override
 				public void doWith(Method method) throws IllegalArgumentException, IllegalAccessException {
@@ -610,7 +610,7 @@ public class AutowiredAnnotationBeanPostProcessor extends InstantiationAwareBean
 			}
 			if (value != null) {
 				ReflectionUtils.makeAccessible(field);
-				field.set(bean, value);
+				field.set(bean, value);//通过field set方法注入
 			}
 		}
 	}

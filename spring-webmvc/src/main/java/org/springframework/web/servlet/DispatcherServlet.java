@@ -165,7 +165,7 @@ public class DispatcherServlet extends FrameworkServlet {
 	/** Well-known name for the ThemeResolver object in the bean factory for this namespace. */
 	public static final String THEME_RESOLVER_BEAN_NAME = "themeResolver";
 
-	/**
+	/**~
 	 * Well-known name for the HandlerMapping object in the bean factory for this namespace.
 	 * Only used when "detectAllHandlerMappings" is turned off.
 	 * @see #setDetectAllHandlerMappings

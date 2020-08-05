@@ -81,13 +81,13 @@ public class DefaultSingletonBeanRegistry extends SimpleAliasRegistry implements
 
 	/** Logger available to subclasses */
 	protected final Log logger = LogFactory.getLog(getClass());
-
+	//三级缓存 singletonObjects 完整生命周期的bean
 	/** Cache of singleton objects: bean name --> bean instance */
 	private final Map<String, Object> singletonObjects = new ConcurrentHashMap<String, Object>(256);
-
+	//解决aop
 	/** Cache of singleton factories: bean name --> ObjectFactory */
 	private final Map<String, ObjectFactory<?>> singletonFactories = new HashMap<String, ObjectFactory<?>>(16);
-
+	//
 	/** Cache of early singleton objects: bean name --> bean instance */
 	private final Map<String, Object> earlySingletonObjects = new HashMap<String, Object>(16);
 
@@ -220,14 +220,14 @@ public class DefaultSingletonBeanRegistry extends SimpleAliasRegistry implements
 				if (logger.isDebugEnabled()) {
 					logger.debug("Creating shared instance of singleton bean '" + beanName + "'");
 				}
-				beforeSingletonCreation(beanName);
+				beforeSingletonCreation(beanName);//会加入到singletonsCurrentlyInCreation
 				boolean newSingleton = false;
 				boolean recordSuppressedExceptions = (this.suppressedExceptions == null);
 				if (recordSuppressedExceptions) {
 					this.suppressedExceptions = new LinkedHashSet<Exception>();
 				}
 				try {
-					singletonObject = singletonFactory.getObject();
+					singletonObject = singletonFactory.getObject();//执行lamabda表达式中方法
 					newSingleton = true;
 				}
 				catch (IllegalStateException ex) {
@@ -253,7 +253,7 @@ public class DefaultSingletonBeanRegistry extends SimpleAliasRegistry implements
 					afterSingletonCreation(beanName);
 				}
 				if (newSingleton) {
-					addSingleton(beanName, singletonObject);
+					addSingleton(beanName, singletonObject);//加入了一个{ConfigurationClassPostProcessor@3897}
 				}
 			}
 			return (singletonObject != NULL_OBJECT ? singletonObject : null);

@@ -143,11 +143,12 @@ public class InvocableHandlerMethod extends HandlerMethod {
 	 */
 	private Object[] getMethodArgumentValues(NativeWebRequest request, ModelAndViewContainer mavContainer,
 			Object... providedArgs) throws Exception {
-
+		//获取方法参数
 		MethodParameter[] parameters = getMethodParameters();
 		Object[] args = new Object[parameters.length];
 		for (int i = 0; i < parameters.length; i++) {
 			MethodParameter parameter = parameters[i];
+			//设置参数名发现者
 			parameter.initParameterNameDiscovery(this.parameterNameDiscoverer);
 			args[i] = resolveProvidedArgument(parameter, providedArgs);
 			if (args[i] != null) {
@@ -155,6 +156,7 @@ public class InvocableHandlerMethod extends HandlerMethod {
 			}
 			if (this.argumentResolvers.supportsParameter(parameter)) {
 				try {
+					//如果支持  就解析出来参数
 					args[i] = this.argumentResolvers.resolveArgument(
 							parameter, mavContainer, request, this.dataBinderFactory);
 					continue;

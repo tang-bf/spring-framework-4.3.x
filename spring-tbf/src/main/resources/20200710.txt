@@ -1,0 +1,39 @@
+beanFactory     org.springframework.beans.factory.support.DefaultListableBeanFactory
+
+ new AnnotatedBeanDefinitionReader(this); 
+beanDefinitionMap    beanDefinitionMap
+
+ConfigurationClassPostProcessor   implements BeanDefinitionRegistryPostProcessor  extends BeanFactoryPostProcessor
+
+DefaultEventListenerFactory 
+EventListenerMethodProcessor 
+
+AutowiredAnnotationBeanPostProcessor  extends BeanPostProcessor 
+
+CommonAnnotationBeanPostProcessor   BeanPostProcessor 
+@javax.annotation.PostConstruct和@javax.annotation.PreDestroy注解的支持。
+以及依据bean name依赖注入的@javax.annotation.Resource支持。
+也支持WebServiceRef注解，具有创建JAX-WS服务端点的能力。最后,处理器还支持EJB3(@EJB)。
+
+RequiredAnnotationBeanPostProcessor   BeanPostProcessor 
+
+register(annotatedClasses);  
+ScopeMetadata scopeMetadata  
+scopeName = BeanDefinition.SCOPE_SINGLETON;
+
+ ScopedProxyMode scopedProxyMode = ScopedProxyMode.NO  DEFAULT  INTERFACES TARGET_CLASS; -
+ 
+ 作用域代理——proxyMode属性
+对于bean的作用域，有一个典型的电子商务应用：需要有一个bean代表用户的购物车。
+
+如果购物车是单例，那么将会导致所有的用户都往一个购物车中添加商品。
+如果购物车是原型作用域的，那么在应用中某个地方往购物车中添加商品，然后到应用中的另外一个地方可能就没法使用了，因为在这里被注入了另外一个原型作用域的的购物车。
+就购物车bean而言，会话作用域是最合适的，因为他与给定用户的关联性最大。
+ 除了上述作用域范围，Spring也允许我们自定义范围，主要操作为：
+
+先实现Scope接口创建自定义作用域范围类
+使用CustomScopeConfigurer注册自定义的作用域范围
+
+
+ (ConfigurableBeanFactory.SCOPE_PROTOTYPE SCOPE_SINGLETON )
+ WebApplicationContext.SCOPE_REQUEST  SCOPE_SESSION  SCOPE_GLOBAL_SESSION  SCOPE_APPLICATION

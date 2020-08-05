@@ -280,9 +280,9 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 				markBeanAsCreated(beanName);
 			}
 
-			try {
+			try {//获取到bd
 				final RootBeanDefinition mbd = getMergedLocalBeanDefinition(beanName);
-				checkMergedBeanDefinition(mbd, beanName, args);
+				checkMergedBeanDefinition(mbd, beanName, args);//校验 mbd.isAbstract()
 
 				// Guarantee initialization of beans that the current bean depends on.
 				String[] dependsOn = mbd.getDependsOn();
@@ -1554,7 +1554,7 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 					// Let the bean definition get re-merged now that we're actually creating
 					// the bean... just in case some of its metadata changed in the meantime.
 					clearMergedBeanDefinition(beanName);
-					this.alreadyCreated.add(beanName);
+					this.alreadyCreated.add(beanName);//加入到已经创建集合中
 				}
 			}
 		}

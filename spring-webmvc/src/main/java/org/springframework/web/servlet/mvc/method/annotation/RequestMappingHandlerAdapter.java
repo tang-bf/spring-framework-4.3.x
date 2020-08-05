@@ -608,6 +608,7 @@ public class RequestMappingHandlerAdapter extends AbstractHandlerMethodAdapter
 		List<HandlerMethodArgumentResolver> resolvers = new ArrayList<HandlerMethodArgumentResolver>();
 
 		// Annotation-based argument resolution
+		//基于注解的参数类型解析器
 		resolvers.add(new RequestParamMethodArgumentResolver(getBeanFactory(), false));
 		resolvers.add(new RequestParamMapMethodArgumentResolver());
 		resolvers.add(new PathVariableMethodArgumentResolver());
@@ -625,6 +626,7 @@ public class RequestMappingHandlerAdapter extends AbstractHandlerMethodAdapter
 		resolvers.add(new RequestAttributeMethodArgumentResolver());
 
 		// Type-based argument resolution
+		//基于类型的参数解析器
 		resolvers.add(new ServletRequestMethodArgumentResolver());
 		resolvers.add(new ServletResponseMethodArgumentResolver());
 		resolvers.add(new HttpEntityMethodProcessor(getMessageConverters(), this.requestResponseBodyAdvice));
@@ -636,6 +638,7 @@ public class RequestMappingHandlerAdapter extends AbstractHandlerMethodAdapter
 		resolvers.add(new UriComponentsBuilderMethodArgumentResolver());
 
 		// Custom arguments
+		//自定义参数解析器
 		if (getCustomArgumentResolvers() != null) {
 			resolvers.addAll(getCustomArgumentResolvers());
 		}
@@ -822,9 +825,20 @@ public class RequestMappingHandlerAdapter extends AbstractHandlerMethodAdapter
 			ModelFactory modelFactory = getModelFactory(handlerMethod, binderFactory);
 
 			ServletInvocableHandlerMethod invocableMethod = createInvocableHandlerMethod(handlerMethod);
+			//参数解析  HandlerMethodArgumentResolver 接口实现类
 			invocableMethod.setHandlerMethodArgumentResolvers(this.argumentResolvers);
+			//HandlerMethodReturnValueHandler
 			invocableMethod.setHandlerMethodReturnValueHandlers(this.returnValueHandlers);
 			invocableMethod.setDataBinderFactory(binderFactory);
+			//形参名字解析 parameterNameDiscoverer
+			// java8之后  编译加上-parameters 可以保留形参名   或者用asm操作字节码获取
+			/**
+			 * public DefaultParameterNameDiscoverer() {
+			 * 		if (standardReflectionAvailable) {
+			 * 			addDiscoverer(new StandardReflectionParameterNameDiscoverer());
+			 *                }
+			 * 		addDiscoverer(new LocalVariableTableParameterNameDiscoverer());* 	}
+			 */
 			invocableMethod.setParameterNameDiscoverer(this.parameterNameDiscoverer);
 
 			ModelAndViewContainer mavContainer = new ModelAndViewContainer();

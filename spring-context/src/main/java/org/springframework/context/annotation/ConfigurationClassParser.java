@@ -262,7 +262,7 @@ class ConfigurationClassParser {
 	protected final SourceClass doProcessConfigurationClass(ConfigurationClass configClass, SourceClass sourceClass)
 			throws IOException {
 
-		// Recursively process any member (nested) classes first
+		// Recursively process any member (nested) classes first 首先递归处理任何成员(嵌套)类
 		processMemberClasses(configClass, sourceClass);
 
 		// Process any @PropertySource annotations

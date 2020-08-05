@@ -509,7 +509,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 		synchronized (this.startupShutdownMonitor) {
 			// Prepare this context for refreshing.
 			prepareRefresh();
-
+			//.DefaultListableBeanFactory@7ac7a4e4:
 			// Tell the subclass to refresh the internal bean factory.
 			ConfigurableListableBeanFactory beanFactory = obtainFreshBeanFactory();
 
@@ -519,7 +519,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 			try {
 				// Allows post-processing of the bean factory in context subclasses.
 				postProcessBeanFactory(beanFactory);
-
+				//调用后置处理器 相当复杂重要
 				// Invoke factory processors registered as beans in the context.
 				invokeBeanFactoryPostProcessors(beanFactory);
 
@@ -531,7 +531,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 
 				// Initialize event multicaster for this context.
 				initApplicationEventMulticaster();
-
+				//在springboot中启动了内嵌的tomcat及加入Dispatcherservlet
 				// Initialize other special beans in specific context subclasses.
 				onRefresh();
 
@@ -630,7 +630,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 		beanFactory.setBeanExpressionResolver(new StandardBeanExpressionResolver(beanFactory.getBeanClassLoader()));
 		beanFactory.addPropertyEditorRegistrar(new ResourceEditorRegistrar(this, getEnvironment()));
 
-		// Configure the bean factory with context callbacks.
+		// Configure the bean factory with context callbacks. ApplicationContextAwareProcessor  extends BeanPostProcessor
 		beanFactory.addBeanPostProcessor(new ApplicationContextAwareProcessor(this));
 		beanFactory.ignoreDependencyInterface(EnvironmentAware.class);
 		beanFactory.ignoreDependencyInterface(EmbeddedValueResolverAware.class);

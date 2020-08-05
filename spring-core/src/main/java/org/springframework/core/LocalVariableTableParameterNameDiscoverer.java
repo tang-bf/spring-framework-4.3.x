@@ -66,6 +66,8 @@ public class LocalVariableTableParameterNameDiscoverer implements ParameterNameD
 
 	@Override
 	public String[] getParameterNames(Method method) {
+		//桥接找到方法
+
 		Method originalMethod = BridgeMethodResolver.findBridgedMethod(method);
 		Class<?> declaringClass = originalMethod.getDeclaringClass();
 		Map<Member, String[]> map = this.parameterNamesCache.get(declaringClass);
