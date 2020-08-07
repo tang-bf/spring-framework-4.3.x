@@ -287,7 +287,14 @@ public class ConfigurationClassPostProcessor implements BeanDefinitionRegistryPo
 			 *  并为BeanDefinition设置属性为lite或者full。
 			 *  在这儿为BeanDefinition设置lite和full属性值是为了后面在使用
 			 * 如果加了@Configuration，那么对应的BeanDefinition为full;
-			 *  如果加了@Bean,@Component,@ComponentScan,@Import,@ImportResource这些注解，则为lite。
+			 *  如果加了@Bean,@Component,@ComponentScan,@Import,@ImportResource这些注解，再看是不是有@bean方法）则为lite。
+			 *  看 ConfigurationClassUtils 源码可知
+			 *   static {
+			 * 		candidateIndicators.add(Component.class.getName());
+			 * 		candidateIndicators.add(ComponentScan.class.getName());
+			 * 		candidateIndicators.add(Import.class.getName());
+			 * 		candidateIndicators.add(ImportResource.class.getName());
+			 *        }
 			 *  lite和full均表示这个BeanDefinition对应的类是一个配置类
 			 */
 			else if (ConfigurationClassUtils.checkConfigurationClassCandidate(beanDef, this.metadataReaderFactory)) {

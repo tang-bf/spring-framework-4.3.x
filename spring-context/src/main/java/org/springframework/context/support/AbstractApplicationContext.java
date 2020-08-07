@@ -528,7 +528,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 
 				// Initialize message source for this context.
 				initMessageSource();
-
+				//springboot中大量运用事件广播  观察者模式实现发布订阅 SimpleApplicationEventMulticaster
 				// Initialize event multicaster for this context.
 				initApplicationEventMulticaster();
 				//在springboot中启动了内嵌的tomcat及加入Dispatcherservlet

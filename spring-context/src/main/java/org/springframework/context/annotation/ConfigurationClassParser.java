@@ -217,7 +217,7 @@ class ConfigurationClassParser {
 
 	protected void processConfigurationClass(ConfigurationClass configClass) throws IOException {
 		if (this.conditionEvaluator.shouldSkip(configClass.getMetadata(), ConfigurationPhase.PARSE_CONFIGURATION)) {
-			return;
+			return; //shouldSkip  调用了conditionl  condition 的相关方法
 		}
 
 		ConfigurationClass existingClass = this.configurationClasses.get(configClass);
@@ -268,7 +268,7 @@ class ConfigurationClassParser {
 		// Process any @PropertySource annotations
 		for (AnnotationAttributes propertySource : AnnotationConfigUtils.attributesForRepeatable(
 				sourceClass.getMetadata(), PropertySources.class,
-				org.springframework.context.annotation.PropertySource.class)) {
+				org.springframework.context.annotation.PropertySource.class)) {// 加载资源文件 properties文件或者xml文件
 			if (this.environment instanceof ConfigurableEnvironment) {
 				processPropertySource(propertySource);
 			}

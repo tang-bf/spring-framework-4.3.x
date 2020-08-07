@@ -84,9 +84,9 @@ class PostProcessorRegistrationDelegate {
 					beanFactory.getBeanNamesForType(BeanDefinitionRegistryPostProcessor.class, true, false);
 			for (String ppName : postProcessorNames) {
 				if (beanFactory.isTypeMatch(ppName, PriorityOrdered.class)) {
-					//beanFactory.getBean(  创建ConfigurationClassPostProcessor
+					//beanFactory.getBean(  创建ConfigurationClassPostProcessor 通过getbean dogetbean getsingleton
 					currentRegistryProcessors.add(beanFactory.getBean(ppName, BeanDefinitionRegistryPostProcessor.class));
-					processedBeans.add(ppName);
+					processedBeans.add(ppName);//到此步 ConfigurationClassPostProcessor 是一个完整的bean加入存在到了beanfactory的singletonObjects
 				}
 			}
 			sortPostProcessors(currentRegistryProcessors, beanFactory);
@@ -124,7 +124,7 @@ class PostProcessorRegistrationDelegate {
 				invokeBeanDefinitionRegistryPostProcessors(currentRegistryProcessors, registry);
 				currentRegistryProcessors.clear();
 			}
-
+			//
 			// Now, invoke the postProcessBeanFactory callback of all processors handled so far.
 			invokeBeanFactoryPostProcessors(registryProcessors, beanFactory);
 			invokeBeanFactoryPostProcessors(regularPostProcessors, beanFactory);

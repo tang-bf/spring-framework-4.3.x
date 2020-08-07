@@ -235,7 +235,7 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 	protected <T> T doGetBean(
 			final String name, final Class<T> requiredType, final Object[] args, boolean typeCheckOnly)
 			throws BeansException {
-
+		//转换bean的名字  前缀有&的会截取掉factorybean
 		final String beanName = transformedBeanName(name);
 		Object bean;
 
@@ -277,7 +277,7 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 			}
 
 			if (!typeCheckOnly) {
-				markBeanAsCreated(beanName);
+				markBeanAsCreated(beanName);//加入到已经创建的集合中
 			}
 
 			try {//获取到bd
@@ -1554,7 +1554,7 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 					// Let the bean definition get re-merged now that we're actually creating
 					// the bean... just in case some of its metadata changed in the meantime.
 					clearMergedBeanDefinition(beanName);
-					this.alreadyCreated.add(beanName);//加入到已经创建集合中
+					this.alreadyCreated.add(beanName);//加入到已经创建集合中 Set<String> alreadyCreated
 				}
 			}
 		}
