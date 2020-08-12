@@ -8,6 +8,7 @@ package com.tbf.config;
 
 import com.tbf.service.Order;
 import com.tbf.service.Power;
+import com.tbf.service.User;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -15,6 +16,10 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @ComponentScan("com.tbf")
 public class AppConfig {
+    @Bean(initMethod = "custominit")
+    public User user() {
+        return new User();
+    }
     @Bean
     public Order getOrder(){
         System.out.println("注入");
