@@ -36,11 +36,11 @@ public class DefaultParameterNameDiscoverer extends PrioritizedParameterNameDisc
 	private static final boolean standardReflectionAvailable = ClassUtils.isPresent(
 			"java.lang.reflect.Executable", DefaultParameterNameDiscoverer.class.getClassLoader());
 
-
+//springmvc 参数绑定  standardReflectionAvailable  jdk8之后提供的Parameter 可以获取参数名称
 	public DefaultParameterNameDiscoverer() {
 		if (standardReflectionAvailable) {
 			addDiscoverer(new StandardReflectionParameterNameDiscoverer());
-		}
+		}// inspectClass  ParameterNameDiscoveringVisitor  通过asm操作字节码得到方法参数名
 		addDiscoverer(new LocalVariableTableParameterNameDiscoverer());
 	}
 

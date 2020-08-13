@@ -186,7 +186,7 @@ public class AnnotationConfigUtils {
 		// Check for JSR-250 support, and if present add the CommonAnnotationBeanPostProcessor.
 		if (jsr250Present && !registry.containsBeanDefinition(COMMON_ANNOTATION_PROCESSOR_BEAN_NAME)) {
 			RootBeanDefinition def = new RootBeanDefinition(CommonAnnotationBeanPostProcessor.class);
-			def.setSource(source);//处理 @Resources、@WebServiceRef、@EJB 都是java 提供的
+			def.setSource(source);//处理 @Resources、@WebServiceRef、@EJB 都是java 提供的 PostConstruct
 			beanDefs.add(registerPostProcessor(registry, def, COMMON_ANNOTATION_PROCESSOR_BEAN_NAME));
 		}
 		//持久化
