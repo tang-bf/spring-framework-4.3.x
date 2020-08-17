@@ -75,7 +75,11 @@ class ConfigurationClassEnhancer {
 
 	// The callbacks to use. Note that these callbacks must be stateless.
 	private static final Callback[] CALLBACKS = new Callback[] {
+			//Bean方法多次调用返回的是一个bean实例的实际拦截方法，这个拦截器就是完全能够说明，为什么多次调用只返回
+			// 一个实例的问题
 			new BeanMethodInterceptor(),
+			//拦截 BeanFactoryAware 为里面的 setBeanFactory 赋值
+			//增强类会最终实现 BeanFactoryAware 接口，这里就是拦截他的回调方法 setBeanFactory方法，获取bean工厂！
 			new BeanFactoryAwareMethodInterceptor(),
 			NoOp.INSTANCE
 	};
@@ -118,13 +122,22 @@ class ConfigurationClassEnhancer {
 	/**
 	 * Creates a new CGLIB {@link Enhancer} instance.
 	 */
+	// CALLBACK_FILTER
+	// 通过这两个类的名称，可以猜出，前者是对加了@Bean注解的方法进行增强，后者是为代理对象的beanFactory属性进行增强
+	// 被代理的对象，如何对方法进行增强呢？就是通过MethodInterceptor拦截器实现的
+	// 加了MethodInterceptor，那么在每次代理对象的方法时，都会先经过MethodInterceptor中的方法
 	private Enhancer newEnhancer(Class<?> configSuperClass, ClassLoader classLoader) {
 		Enhancer enhancer = new Enhancer();
+		// CGLIB的动态代理基于继承
 		enhancer.setSuperclass(configSuperClass);
 		enhancer.setInterfaces(new Class<?>[] {EnhancedConfiguration.class});
 		enhancer.setUseFactory(false);
-		enhancer.setNamingPolicy(SpringNamingPolicy.INSTANCE);
+		enhancer.setNamingPolicy(SpringNamingPolicy.INSTANCE);//代理类名称生成策略 BySpringCGLIB
 		enhancer.setStrategy(new BeanFactoryAwareGeneratorStrategy(classLoader));
+		// BeanMethodInterceptor  BeanFactoryAwareMethodInterceptor
+		//前者是对加了@Bean注解的方法进行增强，后者是为代理对象的beanFactory属性进行增强
+		// 被代理的对象，如何对方法进行增强呢？就是通过MethodInterceptor拦截器实现的
+		// 加了MethodInterceptor，那么在每次代理对象的方法时，都会先经过MethodInterceptor中的方法
 		enhancer.setCallbackFilter(CALLBACK_FILTER);
 		enhancer.setCallbackTypes(CALLBACK_FILTER.getCallbackTypes());
 		return enhancer;

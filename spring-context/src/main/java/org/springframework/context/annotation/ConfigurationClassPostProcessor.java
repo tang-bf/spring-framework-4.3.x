@@ -256,13 +256,21 @@ public class ConfigurationClassPostProcessor implements BeanDefinitionRegistryPo
 					"postProcessBeanFactory already called on this post-processor against " + beanFactory);
 		}
 		this.factoriesPostProcessed.add(factoryId);
+		// 下面的if语句不会进入，因为在执行BeanFactoryPostProcessor时，
+		// 会先执行BeanDefinitionRegistryPostProcessor的postProcessorBeanDefinitionRegistry()方法
+		//而在执行postProcessorBeanDefinitionRegistry方法时，都会调用processConfigBeanDefinitions方法，
+		//	这与postProcessorBeanFactory()方法的执行逻辑是一样的
+		//	// postProcessorBeanFactory()方法也会调用processConfigBeanDefinitions方法，
+		//	为了避免重复执行，所以在执行方法之前会先生成一个id，将id放入到一个set当中，每次执行之前
+		//	 先判断id是否存在，所以在此处，永远不会进入到if语句中
 		if (!this.registriesPostProcessed.contains(factoryId)) {
 			// BeanDefinitionRegistryPostProcessor hook apparently not supported...
 			// Simply call processConfigurationClasses lazily at this point then.
 			processConfigBeanDefinitions((BeanDefinitionRegistry) beanFactory);
 		}
-		//postProcessBeanFactory  enhanceConfigurationClasses 进行cglib增强
+		//postProcessBeanFactory  enhanceConfigurationClasses 对@Configuration注解的类进行cglib增强
 		enhanceConfigurationClasses(beanFactory);
+		//注册了一个beanpostprocessor   ImportAwareBeanPostProcessor
 		beanFactory.addBeanPostProcessor(new ImportAwareBeanPostProcessor(beanFactory));
 	}
 
@@ -446,6 +454,7 @@ public class ConfigurationClassPostProcessor implements BeanDefinitionRegistryPo
 			try {
 				// Set enhanced subclass of the user-specified bean class
 				Class<?> configClass = beanDef.resolveBeanClass(this.beanClassLoader);
+				//ConfigurationClassEnhancer 进行代理增强
 				Class<?> enhancedClass = enhancer.enhance(configClass, this.beanClassLoader);
 				if (configClass != enhancedClass) {
 					if (logger.isDebugEnabled()) {
