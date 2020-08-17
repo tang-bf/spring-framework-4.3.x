@@ -80,7 +80,7 @@ class PostProcessorRegistrationDelegate {
 			//线处理 BeanDefinitionRegistryPostProcessors 实现了PriorityOrdered
 			// 前面走的流程可以知道只有一个ConfigurationClassPostProcessor 实例化ConfigurationClassPostProcessor 为bean
 			// First, invoke the BeanDefinitionRegistryPostProcessors that implement PriorityOrdered.
-			String[] postProcessorNames =
+			String[] postProcessorNames =// 从beandefinitoinNames 解析出BeanDefinitionRegistryPostProcessor 类型的，会判断是否是facotrybean
 					beanFactory.getBeanNamesForType(BeanDefinitionRegistryPostProcessor.class, true, false);
 			for (String ppName : postProcessorNames) {
 				if (beanFactory.isTypeMatch(ppName, PriorityOrdered.class)) {

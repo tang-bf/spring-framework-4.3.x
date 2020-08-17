@@ -512,7 +512,8 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 			//.DefaultListableBeanFactory@7ac7a4e4:
 			// Tell the subclass to refresh the internal bean factory.
 			ConfigurableListableBeanFactory beanFactory = obtainFreshBeanFactory();
-			//注册了一个重要的beanpostprocessor  ApplicationContextAwareProcessor 会处理aware接口 在填充属性之后  lifecyclecallback之前执行,springboot dispatchersetrvlet 传applicationcontext参数就是通过这种方法
+			//注册了一个重要的beanpostprocessor  ApplicationContextAwareProcessor 会处理aware接口 在填充属性之后
+			// lifecyclecallback之前执行,springboot dispatchersetrvlet 传applicationcontext参数就是通过这种方法
 			// Prepare the bean factory for use in this context.
 			prepareBeanFactory(beanFactory);
 
