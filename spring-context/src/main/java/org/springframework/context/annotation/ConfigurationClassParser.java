@@ -216,7 +216,7 @@ class ConfigurationClassParser {
 		return this.configurationClasses.keySet();
 	}
 
-
+	//解析当前类的内部类  解析当前为@componetscan的类  会循环递归调用这个方法
 	protected void processConfigurationClass(ConfigurationClass configClass) throws IOException {
 		if (this.conditionEvaluator.shouldSkip(configClass.getMetadata(), ConfigurationPhase.PARSE_CONFIGURATION)) {
 			return; //shouldSkip  调用了conditionl  condition 的相关方法
@@ -296,9 +296,9 @@ class ConfigurationClassParser {
 			for (AnnotationAttributes componentScan : componentScans) {
 				// The config class is annotated with @ComponentScan -> perform the scan immediately
 				//解析包扫描路径下的类解析成bd
-				Set<BeanDefinitionHolder> scannedBeanDefinitions =
+				Set<BeanDefinitionHolder> scannedBeanDefinitions =			//ClassPathBeanDefinitionScanner doScan
 						this.componentScanParser.parse(componentScan, sourceClass.getMetadata().getClassName());
-				// Check the set of scanned definitions for any further config classes and parse recursively if needed
+				// Check the set of scanned definitions for any further config classes and parse recursively(递归) if needed
 				//上不解析出来的bd本身可能也有ComponentScans注解所以会地柜调用解析，直到解析完
 				for (BeanDefinitionHolder holder : scannedBeanDefinitions) {
 					BeanDefinition bdCand = holder.getBeanDefinition().getOriginatingBeanDefinition();

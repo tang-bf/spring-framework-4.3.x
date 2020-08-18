@@ -102,7 +102,12 @@ public class GenericApplicationContext extends AbstractApplicationContext implem
 	 * @see #refresh
 	 */
 	public GenericApplicationContext() {
-		//初始化bean工厂
+		//初始化bean工厂   new DefaultListableBeanFactory 调用父类 AbstractAutowireCapableBeanFactory 构造方法
+		// /** Resolver strategy for method parameter names */
+		//	private ParameterNameDiscoverer parameterNameDiscoverer = new DefaultParameterNameDiscoverer();
+		////springmvc 参数绑定  standardReflectionAvailable  jdk8之后提供的Parameter 可以获取参数名称
+		//	/** Whether to automatically try to resolve circular references between beans */
+		//	private boolean allowCircularReferences = true; 默认支持循环依赖  AbstractAutowireCapableBeanFactory
 		this.beanFactory = new DefaultListableBeanFactory();
 	}
 
