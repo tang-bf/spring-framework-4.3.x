@@ -13,21 +13,21 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 
-//@Configuration
-//@ComponentScan("com.tbf")
+@Configuration
+@ComponentScan("com.tbf")
 public class AppConfig {
-//    @Bean(initMethod = "custominit")
-//    public User user() {
-//        return new User();
-//    }
-//    @Bean
-//    public Order getOrder(){
-//        System.out.println("注入");
-//        return new Order();
-//    }
-//    @Bean
-//    public Power getPower(){
-//        getOrder();//此时不会再new  一个order出来
-//        return new Power();
-//    }
+    @Bean(initMethod = "custominit")
+    public User user() {
+        return new User();
+    }
+    @Bean
+    public Order getOrder(){
+        System.out.println("注入");
+        return new Order();
+    }
+    @Bean
+    public Power getPower(){
+        getOrder();//此时不会再new  一个order出来
+        return new Power();
+    }
 }
