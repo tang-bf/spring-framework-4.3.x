@@ -110,7 +110,7 @@ class ConfigurationClassEnhancer {
 						configClass.getName()));
 			}
 			return configClass;
-		}
+		}						//通过cglib创建增强代理类
 		Class<?> enhancedClass = createClass(newEnhancer(configClass, classLoader));
 		if (logger.isDebugEnabled()) {
 			logger.debug(String.format("Successfully enhanced %s; enhanced class name is: %s",
