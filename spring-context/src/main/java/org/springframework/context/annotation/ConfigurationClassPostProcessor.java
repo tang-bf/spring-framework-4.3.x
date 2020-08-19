@@ -269,7 +269,7 @@ public class ConfigurationClassPostProcessor implements BeanDefinitionRegistryPo
 			processConfigBeanDefinitions((BeanDefinitionRegistry) beanFactory);
 		}
 		//postProcessBeanFactory  enhanceConfigurationClasses 对@Configuration注解的类进行cglib增强
-		enhanceConfigurationClasses(beanFactory);
+		enhanceConfigurationClasses(beanFactory);//是full模式的通过cglib进行增强
 		//注册了一个beanpostprocessor   ImportAwareBeanPostProcessor
 		beanFactory.addBeanPostProcessor(new ImportAwareBeanPostProcessor(beanFactory));
 	}
@@ -370,13 +370,13 @@ public class ConfigurationClassPostProcessor implements BeanDefinitionRegistryPo
 						this.importBeanNameGenerator, parser.getImportRegistry());
 			}
 			// 将上一步parser解析出的ConfigurationClass类加载成BeanDefinition
-			// 实际上经过上一步的parse()后，解析出来的bean已经放入到BeanDefinition中了，
+			// 实际上经过上一步的parse()后，解析出来的bean已经放入到BeanDefinition中了，这句话待确认
 			// 但是由于这些bean可能会引入新的bean，
 			// 例如实现了ImportBeanDefinitionRegistrar或者ImportSelector接口的bean，或者bean中存在被@Bean注解的方法
 			// 因此需要执行一次loadBeanDefinition()，
 			// 这样就会执行ImportBeanDefinitionRegistrar或者ImportSelector接口的方法或者@Bean注释的方法
-			//将通过@Import、@Bean等注解方式注册的类解析成BeanDefinition，然后注册到BeanDefinitionMap中。
-			this.reader.loadBeanDefinitions(configClasses);
+			//将通过@Import、@Bean importresource等注解方式注册的类解析成BeanDefinition，然后注册到BeanDefinitionMap中。
+			this.reader.loadBeanDefinitions(configClasses);//ConfigurationClassBeanDefinitionReader 解析configurationclass
 			alreadyParsed.addAll(configClasses);
 
 			candidates.clear();
@@ -386,16 +386,16 @@ public class ConfigurationClassPostProcessor implements BeanDefinitionRegistryPo
 			// 如果有，registry.getBeanDefinitionCount()就会大于candidateNames.length
 			// 这样就需要再次遍历新加入的BeanDefinition，并判断这些bean是否已经被解析过了，如果未解析，需要重新进行解析
 			// 这里的AppConfig类向容器中添加的bean，实际上在parser.parse()这一步已经全部被解析了
-			// 所以为什么还需要做这个判断，目前没看懂，似乎没有任何意义。
+			// 所以为什么还需要做这个判断，目前没看懂，似乎没有任何意义。registry.getBeanDefinitionCount() bdmap 9个了  candidateNames7个（6个rootbean+1个传入的配置类）
 			if (registry.getBeanDefinitionCount() > candidateNames.length) {
 				String[] newCandidateNames = registry.getBeanDefinitionNames();
-				Set<String> oldCandidateNames = new HashSet<String>(Arrays.asList(candidateNames));
+				Set<String> oldCandidateNames = new HashSet<String>(Arrays.asList(candidateNames));//7个
 				Set<String> alreadyParsedClasses = new HashSet<String>();
 				for (ConfigurationClass configurationClass : alreadyParsed) {
-					alreadyParsedClasses.add(configurationClass.getMetadata().getClassName());
+					alreadyParsedClasses.add(configurationClass.getMetadata().getClassName());//3个
 				}
 				// 如果有未解析的类，则将其添加到candidates中，这样candidates不为空，就会进入到下一次的while的循环中
-				for (String candidateName : newCandidateNames) {
+				for (String candidateName : newCandidateNames) {//9个
 					if (!oldCandidateNames.contains(candidateName)) {
 						BeanDefinition bd = registry.getBeanDefinition(candidateName);
 						if (ConfigurationClassUtils.checkConfigurationClassCandidate(bd, this.metadataReaderFactory) &&
@@ -419,7 +419,7 @@ public class ConfigurationClassPostProcessor implements BeanDefinitionRegistryPo
 		if (this.metadataReaderFactory instanceof CachingMetadataReaderFactory) {
 			((CachingMetadataReaderFactory) this.metadataReaderFactory).clearCache();
 		}
-	}
+	}//至此bdregsitrypostprocessor 后置处理执行完
 
 	/**
 	 * Post-processes a BeanFactory in search of Configuration class BeanDefinitions;

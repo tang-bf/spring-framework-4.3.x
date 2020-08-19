@@ -112,7 +112,7 @@ class ConfigurationClassBeanDefinitionReader {
 	 */
 	public void loadBeanDefinitions(Set<ConfigurationClass> configurationModel) {
 		TrackedConditionEvaluator trackedConditionEvaluator = new TrackedConditionEvaluator();
-		for (ConfigurationClass configClass : configurationModel) {
+		for (ConfigurationClass configClass : configurationModel) {//循环处理 configurationclass 放到bdmap中
 			loadBeanDefinitionsForConfigurationClass(configClass, trackedConditionEvaluator);
 		}
 	}
@@ -133,15 +133,15 @@ class ConfigurationClassBeanDefinitionReader {
 			return;
 		}
 
-		if (configClass.isImported()) {
+		if (configClass.isImported()) {// 配置类 注册到bdmap中
 			registerBeanDefinitionForImportedConfigurationClass(configClass);
-		}
+		}//是否有@bean方法
 		for (BeanMethod beanMethod : configClass.getBeanMethods()) {
-			loadBeanDefinitionsForBeanMethod(beanMethod);
+			loadBeanDefinitionsForBeanMethod(beanMethod);//同样注册到bdmap中
 		}
-
+		//处理importresource
 		loadBeanDefinitionsFromImportedResources(configClass.getImportedResources());
-		loadBeanDefinitionsFromRegistrars(configClass.getImportBeanDefinitionRegistrars());
+		loadBeanDefinitionsFromRegistrars(configClass.getImportBeanDefinitionRegistrars());//处理importImportBeanDefinitionRegistrar
 	}
 
 	/**

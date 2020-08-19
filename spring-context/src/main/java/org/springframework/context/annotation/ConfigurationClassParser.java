@@ -252,7 +252,7 @@ class ConfigurationClassParser {
 		}
 		while (sourceClass != null);
 		// 将解析的配置类存储起来，这样回到parse()方法时，能取到值
-		this.configurationClasses.put(configClass, configClass);
+		this.configurationClasses.put(configClass, configClass); // import导入的普通类及@import注解修饰的类（A,B,TestImport三个类）封装为configurationclass
 	}
 
 	/**
@@ -621,10 +621,10 @@ class ConfigurationClassParser {
 					}
 					else {
 						// Candidate class not an ImportSelector or ImportBeanDefinitionRegistrar ->
-						// process it as an @Configuration class
+						// process it as an @Configuration class  import导入普通类  当做配置类解析
 						this.importStack.registerImport(
 								currentSourceClass.getMetadata(), candidate.getMetadata().getClassName());
-						processConfigurationClass(candidate.asConfigClass(configClass));
+						processConfigurationClass(candidate.asConfigClass(configClass));//回到了解析configuaration方法中
 					}
 				}
 			}
