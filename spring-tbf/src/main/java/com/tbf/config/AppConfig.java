@@ -20,6 +20,7 @@ public class AppConfig {
     public User user() {
         return new User();
     }
+    //getOrder  getPower最后解析时会封装到bdmap中
     @Bean
     public Order getOrder(){
         System.out.println("注入");
