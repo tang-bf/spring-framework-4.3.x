@@ -524,7 +524,8 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 				// Invoke factory processors registered as beans in the context.
 				invokeBeanFactoryPostProcessors(beanFactory);
 
-				// Register bean processors that intercept bean creation.注册一些bean的后置处理器，包括上面过程中添加的和bdmap中获取的
+				// Register bean processors that intercept bean creation.
+				// 注册一些bean的后置处理器，包括上面过程中添加的和bdmap中获取的
 				registerBeanPostProcessors(beanFactory);
 
 				// Initialize message source for this context.
@@ -532,7 +533,8 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 				//springboot中大量运用事件广播  观察者模式实现发布订阅 SimpleApplicationEventMulticaster
 				// Initialize event multicaster for this context.
 				initApplicationEventMulticaster();
-				//在springboot AnnotationConfigServletWebServerApplicationContext extends ServletWebServerApplicationContext 中启动了内嵌的tomcat及加入Dispatcherservlet
+				//在springboot AnnotationConfigServletWebServerApplicationContext
+				// extends ServletWebServerApplicationContext 中启动了内嵌的tomcat及加入Dispatcherservlet
 				// Initialize other special beans in specific context subclasses.
 				onRefresh();
 
