@@ -2,6 +2,7 @@ package com.tbf.config;
 /**
  * Full @Configuration和lite @Bean mode，
  * spring 5版本中增加了
+ *
  * @Configuration(proxyBeanMethods = false)
  * 默认是true，需要显示改为false才算是Lite模式
  */
@@ -20,14 +21,16 @@ public class AppConfig {
     public User user() {
         return new User();
     }
+
     //getOrder  getPower最后解析时会封装到bdmap中
     @Bean
-    public Order getOrder(){
+    public Order getOrder() {
         System.out.println("注入");
         return new Order();
     }
+
     @Bean
-    public Power getPower(){
+    public Power getPower() {
         getOrder();//此时不会再new  一个order出来
         return new Power();
     }
