@@ -1,5 +1,8 @@
 package com.tbf.config;
 
+import org.springframework.stereotype.Component;
+
+
 public class A {
   //  B b;//xml手动维护的时候，其实和属性无关，只是和set方法有关，所以属性可以不要，
     //可以把这个注释掉，参考setxxx方法实现验证

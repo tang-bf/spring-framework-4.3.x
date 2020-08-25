@@ -1,7 +1,4 @@
-import com.tbf.config.A;
-import com.tbf.config.AppConfig;
-import com.tbf.config.B;
-import com.tbf.config.TestImport;
+import com.tbf.config.*;
 import com.tbf.service.User;
 import org.springframework.cglib.core.DebuggingClassWriter;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
@@ -20,10 +17,10 @@ public class TestDemo {
                // = new AnnotationConfigApplicationContext(TestImport.class);
         User bean = annotationConfigApplicationContext.getBean(User.class);
         AppConfig bean1 = annotationConfigApplicationContext.getBean(AppConfig.class);
-        /*A a = annotationConfigApplicationContext.getBean(A.class);
-        System.out.println(a);
-        B b = annotationConfigApplicationContext.getBean(B.class);
-        System.out.println(b);*/
+        C c= annotationConfigApplicationContext.getBean(C.class);
+        System.out.println(c);
+        D d = annotationConfigApplicationContext.getBean(D.class);
+        System.out.println(d);
 
     }
 }
