@@ -17,7 +17,7 @@
       http://www.springframework.org/schema/util
       http://www.springframework.org/schema/util/spring-util-4.3.xsd">
     <bean id="a" class="com.tbf.config.A" >
-        <!-- 由程序员手动指定的依赖关系 称为手动装配-->
+        <!-- 由程序员手动指定的依赖关系 称为手动装配 手动注入-->
         <property name="b">
             <ref bean="b" />
         </property>
