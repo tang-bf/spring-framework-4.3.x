@@ -371,7 +371,7 @@ class ConfigurationClassEnhancer {
 				}
 				return cglibMethodProxy.invokeSuper(enhancedConfigInstance, beanMethodArgs);
 			}
-
+			//beanMethod 是getorder  当前方法是getpower 走下面逻辑，直接从工厂获取bean
 			return obtainBeanInstanceFromFactory(beanMethod, beanMethodArgs, beanFactory, beanName);
 		}
 

@@ -581,7 +581,7 @@ public class AutowiredAnnotationBeanPostProcessor extends InstantiationAwareBean
 				desc.setContainingClass(bean.getClass());
 				Set<String> autowiredBeanNames = new LinkedHashSet<String>(1);
 				TypeConverter typeConverter = beanFactory.getTypeConverter();
-				try {
+				try {//解析d对象为object
 					value = beanFactory.resolveDependency(desc, beanName, autowiredBeanNames, typeConverter);
 				}
 				catch (BeansException ex) {

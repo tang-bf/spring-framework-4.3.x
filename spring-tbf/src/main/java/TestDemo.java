@@ -22,5 +22,6 @@ public class TestDemo {
         D d = annotationConfigApplicationContext.getBean(D.class);
         System.out.println(d);
 
+
     }
 }
