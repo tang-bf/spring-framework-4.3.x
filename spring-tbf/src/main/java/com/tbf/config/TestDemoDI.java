@@ -25,5 +25,6 @@ public class TestDemoDI {
         A beanA = classPathXmlApplicationContext.getBean(A.class);
         System.out.println(bean);
         System.out.println(beanA);
+        //家里电脑下载运行成功
     }
 }
