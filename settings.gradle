@@ -31,4 +31,5 @@ include "buildSrc"
 rootProject.children.find{ it.name == "buildSrc" }.name = "spring-build-src"
 include 'spring-tbf'
 findProject(':spring-tbf')?.name = 'tbf'
+include 'spring-tbf-mvc'
 

@@ -278,7 +278,7 @@ public class DispatcherServlet extends FrameworkServlet {
 		// Load default strategy implementations from properties file.
 		// This is currently strictly internal and not meant to be customized
 		// by application developers.
-		try {
+		try {//加载dispatcherservlet.properties文件
 			ClassPathResource resource = new ClassPathResource(DEFAULT_STRATEGIES_PATH, DispatcherServlet.class);
 			defaultStrategies = PropertiesLoaderUtils.loadProperties(resource);
 		}
@@ -592,7 +592,7 @@ public class DispatcherServlet extends FrameworkServlet {
 
 		// Ensure we have at least one HandlerMapping, by registering
 		// a default HandlerMapping if no other mappings are found.
-		if (this.handlerMappings == null) {
+		if (this.handlerMappings == null) {//defaultStrategies 是static静态快初始化的
 			this.handlerMappings = getDefaultStrategies(context, HandlerMapping.class);
 			if (logger.isDebugEnabled()) {
 				logger.debug("No HandlerMappings found in servlet '" + getServletName() + "': using default");
@@ -897,7 +897,7 @@ public class DispatcherServlet extends FrameworkServlet {
 		request.setAttribute(OUTPUT_FLASH_MAP_ATTRIBUTE, new FlashMap());
 		request.setAttribute(FLASH_MAP_MANAGER_ATTRIBUTE, this.flashMapManager);
 
-		try {
+		try {//FrameworksERVLET  DOGET -->> processRequest -->>doservice
 			doDispatch(request, response);
 		}
 		finally {
@@ -932,7 +932,7 @@ public class DispatcherServlet extends FrameworkServlet {
 			ModelAndView mv = null;
 			Exception dispatchException = null;
 
-			try {
+			try {//检测是否文件上传
 				processedRequest = checkMultipart(request);
 				multipartRequestParsed = (processedRequest != request);
 
@@ -1152,7 +1152,8 @@ public class DispatcherServlet extends FrameworkServlet {
 	 * @return the HandlerExecutionChain, or {@code null} if no handler could be found
 	 */
 	protected HandlerExecutionChain getHandler(HttpServletRequest request) throws Exception {
-		for (HandlerMapping hm : this.handlerMappings) {
+		for (HandlerMapping hm : this.handlerMappings) {//requestmappinghandlemapping (mappingregistry registry(map requsetmappinginfo query.do bean=mycontroller method query  ))
+            // beannameurlhandlermapping (handlermap beannamecontroller user.do test3) 什么时候放进去的，跟踪看下
 			if (logger.isTraceEnabled()) {
 				logger.trace(
 						"Testing handler map [" + hm + "] in DispatcherServlet with name '" + getServletName() + "'");
