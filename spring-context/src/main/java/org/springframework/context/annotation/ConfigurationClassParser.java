@@ -315,6 +315,7 @@ class ConfigurationClassParser {
 
 		// Process any @Import annotations
 		//三种import 形式 {@link 最后解析没有不是前两种的当做 Configuration 处理}, {@link 1顺序 ：ImportSelector}, {@link  2顺序 ImportBeanDefinitionRegistrar}
+		//getImports(sourceClass) 会解析到appconfig中的两个enable 当做import处理 beanname = null 拿到所有注解便利
 		processImports(configClass, sourceClass, getImports(sourceClass), true);
 		//ImportResource 解析配置文件
 		// Process any @ImportResource annotations
@@ -340,7 +341,7 @@ class ConfigurationClassParser {
 		processInterfaces(configClass, sourceClass);
 		//配置类继承了某个类，那么配置类的父类也会被进行解析
 		// 父类是JDK内置的类例外，全类名以java开头的)。
-		// Process superclass, if any
+		// Process superclass, if any  例如enablewebmvc 解析到 DelegatingWebMvcConfiguration 判断解析父类
 		if (sourceClass.getMetadata().hasSuperClass()) {
 			String superclass = sourceClass.getMetadata().getSuperClassName();
 			if (!superclass.startsWith("java") && !this.knownSuperclasses.containsKey(superclass)) {
@@ -527,7 +528,7 @@ class ConfigurationClassParser {
 		Set<SourceClass> imports = new LinkedHashSet<SourceClass>();
 		Set<SourceClass> visited = new LinkedHashSet<SourceClass>();
 		collectImports(sourceClass, imports, visited);
-		return imports;
+		return imports;//enablewebmvc上的import注解处理 封装成sourceclass
 	}
 
 	/**
