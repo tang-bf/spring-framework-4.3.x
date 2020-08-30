@@ -869,7 +869,7 @@ public class RequestMappingHandlerAdapter extends AbstractHandlerMethodAdapter
 			if (asyncManager.isConcurrentHandlingStarted()) {
 				return null;
 			}
-
+            //处理是否需要视图
 			return getModelAndView(mavContainer, modelFactory, webRequest);
 		}
 		finally {
@@ -970,7 +970,7 @@ public class RequestMappingHandlerAdapter extends AbstractHandlerMethodAdapter
 			ModelFactory modelFactory, NativeWebRequest webRequest) throws Exception {
 
 		modelFactory.updateModel(webRequest, mavContainer);
-		if (mavContainer.isRequestHandled()) {
+		if (mavContainer.isRequestHandled()) {//处理写出响应的时候weitrue不会走modle下面的逻辑
 			return null;
 		}
 		ModelMap model = mavContainer.getModel();

@@ -86,7 +86,7 @@ public class HandlerMethodReturnValueHandlerComposite implements AsyncHandlerMet
 		for (HandlerMethodReturnValueHandler handler : this.returnValueHandlers) {
 			if (isAsyncValue && !(handler instanceof AsyncHandlerMethodReturnValueHandler)) {
 				continue;
-			}
+			}//比如 方法注解上有@responsebody注解  则用RequestResponseBodyMethodProcessor suport方法判断 在spring事件处理器也有类似思想
 			if (handler.supportsReturnType(returnType)) {
 				return handler;
 			}

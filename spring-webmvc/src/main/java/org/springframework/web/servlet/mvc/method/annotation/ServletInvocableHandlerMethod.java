@@ -93,8 +93,8 @@ public class ServletInvocableHandlerMethod extends InvocableHandlerMethod {
 	 */
 	public void invokeAndHandle(ServletWebRequest webRequest, ModelAndViewContainer mavContainer,
 			Object... providedArgs) throws Exception {
-
-		Object returnValue = invokeForRequest(webRequest, mavContainer, providedArgs);
+        //ModelAndViewContainer 整合视图。判断视图是否需要跳转 整合model
+		Object returnValue = invokeForRequest(webRequest, mavContainer, providedArgs);//此时这里已经调用完controller上的方法
 		setResponseStatus(webRequest);
 
 		if (returnValue == null) {
@@ -109,7 +109,7 @@ public class ServletInvocableHandlerMethod extends InvocableHandlerMethod {
 		}
 
 		mavContainer.setRequestHandled(false);
-		try {
+		try {//真正去处理响应
 			this.returnValueHandlers.handleReturnValue(
 					returnValue, getReturnValueType(returnValue), mavContainer, webRequest);
 		}
@@ -120,10 +120,12 @@ public class ServletInvocableHandlerMethod extends InvocableHandlerMethod {
 			throw ex;
 		}
 	}
-
-	/**
-	 * Set the response status according to the {@link ResponseStatus} annotation.
-	 */
+    //@ResponseStatus注解的异常类会被ResponseStatusExceptionResolver
+    // @ResponseStatus(value = HttpStatus.FORBIDDEN,reason = "用户名和密码不匹配!")
+    //public class UserNameNotMatchPasswordException extends RuntimeException{
+    /**
+     * Set the response status according to the {@link ResponseStatus} annotation.
+     */
 	private void setResponseStatus(ServletWebRequest webRequest) throws IOException {
 		HttpStatus status = getResponseStatus();
 		if (status == null) {

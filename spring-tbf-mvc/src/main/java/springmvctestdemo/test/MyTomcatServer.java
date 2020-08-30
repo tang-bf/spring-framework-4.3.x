@@ -25,7 +25,7 @@ public class MyTomcatServer {
 
                 //EventListener
         Tomcat tomcat = new Tomcat();
-        tomcat.setPort(9898);
+        tomcat.setPort(9899);
         tomcat.addWebapp("/","d:\\tomc\\");//
       // tomcat.addContext("/","") ;不会调用mydispatcherservlet的onstartup方法
         // 只会去初始化一个context的资源目录  并不会加载web的声明周期

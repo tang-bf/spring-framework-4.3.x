@@ -156,7 +156,8 @@ public class InternalResourceView extends AbstractUrlBasedView {
 			response.setContentType(getContentType());
 			if (logger.isDebugEnabled()) {
 				logger.debug("Including resource [" + getUrl() + "] in InternalResourceView '" + getBeanName() + "'");
-			}
+			}// include 和forward区别？
+			//httpservletresponse.getWriter.close的时候汇之星include方法
 			rd.include(request, response);
 		}
 

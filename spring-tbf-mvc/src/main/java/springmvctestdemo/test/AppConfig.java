@@ -1,6 +1,7 @@
 package springmvctestdemo.test;
 
 import com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.format.FormatterRegistry;
 import org.springframework.http.converter.HttpMessageConverter;
@@ -12,6 +13,8 @@ import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.HandlerMethodReturnValueHandler;
 import org.springframework.web.servlet.HandlerExceptionResolver;
 import org.springframework.web.servlet.config.annotation.*;
+import org.springframework.web.servlet.view.InternalResourceViewResolver;
+import org.springframework.web.servlet.view.UrlBasedViewResolver;
 
 import java.util.List;
 
@@ -65,14 +68,14 @@ public class AppConfig implements WebMvcConfigurer {
 //    public HttpMessageConverter get(){
 //        return new FastJsonHttpMessageConverter();
 //    }
-//    @Bean
-//    public InternalResourceViewResolver internalResourceViewResolver(){
-//        InternalResourceViewResolver internalResourceViewResolver = (InternalResourceViewResolver) new UrlBasedViewResolver();
-//        internalResourceViewResolver.setPrefix("/");
-//        internalResourceViewResolver.setSuffix(".jsp");
-//        internalResourceViewResolver.setExposeContextBeansAsAttributes(true);
-//        return internalResourceViewResolver;
-//    }
+    @Bean
+    public InternalResourceViewResolver internalResourceViewResolver(){
+        InternalResourceViewResolver internalResourceViewResolver = new InternalResourceViewResolver();
+        internalResourceViewResolver.setPrefix("/page/");
+        internalResourceViewResolver.setSuffix(".html");
+        internalResourceViewResolver.setExposeContextBeansAsAttributes(true);
+        return internalResourceViewResolver;
+    }
 //    @Bean("multipartResolver")//名字必须是这个，为什么？
 //    public CommonsMultipartResolver commonsMultipartResolver(){
 //        CommonsMultipartResolver commonsMultipartResolver = new CommonsMultipartResolver();
@@ -132,7 +135,7 @@ public class AppConfig implements WebMvcConfigurer {
         //		this.viewResolvers.add(resolver);
         //		return new UrlBasedViewResolverRegistration(resolver);
         //	}
-        registry.jsp();
+       // registry.jsp();
 
     }
 

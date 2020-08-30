@@ -167,14 +167,14 @@ public abstract class AbstractMessageConverterMethodProcessor extends AbstractMe
 		Object outputValue;
 		Class<?> valueType;
 		Type declaredType;
-
+		//判断返回值是否是string string implements charsequence接口，jdk底层类结果图很复杂,还未仔细看过
 		if (value instanceof CharSequence) {
 			outputValue = value.toString();
 			valueType = String.class;
 			declaredType = String.class;
 		}
 		else {
-			outputValue = value;
+			outputValue = value;//判断返回类型 hashmap
 			valueType = getReturnValueType(outputValue, returnType);
 			declaredType = getGenericType(returnType);
 		}
@@ -219,6 +219,7 @@ public abstract class AbstractMessageConverterMethodProcessor extends AbstractMe
 
 		if (selectedMediaType != null) {
 			selectedMediaType = selectedMediaType.removeQualityValue();
+			//messageConverters 自己配置的fastjsonhttpmessage 进一步调试发现最终是通过response.getoutputstream.write出去数据
 			for (HttpMessageConverter<?> messageConverter : this.messageConverters) {
 				if (messageConverter instanceof GenericHttpMessageConverter) {
 					if (((GenericHttpMessageConverter) messageConverter).canWrite(
